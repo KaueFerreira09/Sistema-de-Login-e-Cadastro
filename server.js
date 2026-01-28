@@ -20,6 +20,13 @@ app.use(session({
 }));
 
 // ====================
+// ROTA INICIAL 👈 AQUI
+// ====================
+app.get('/', (req, res) => {
+    res.redirect('/login.html');
+});
+
+// ====================
 // ROTA DE CADASTRO
 // ====================
 app.post('/register', async (req, res) => {
@@ -44,6 +51,7 @@ app.post('/register', async (req, res) => {
 // ====================
 // ROTA DE LOGIN
 // ====================
+
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
