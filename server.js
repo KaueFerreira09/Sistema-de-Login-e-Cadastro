@@ -94,5 +94,5 @@ app.get('/logout', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log("Servidro rodando em http://localhost:" + PORT);
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
