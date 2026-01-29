@@ -8,11 +8,16 @@ require('dotenv').config();
 const app = express();
 const PORT = 3000;
 
-// Middlewares
+// ====================
+// MIDDLEWARES GLOBAIS
+// ====================
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// 👉 AQUI (antes das rotas)
 app.use(express.static('public'));
 
+// 👉 Session SEMPRE antes das rotas
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -20,9 +25,12 @@ app.use(session({
 }));
 
 // ====================
-// ROTA INICIAL 👈 AQUI
+// ROTA INICIAL
 // ====================
 app.get('/', (req, res) => {
+    if (req.session.userId) {
+        return res.redirect('/dashboard.html');
+    }
     res.redirect('/login.html');
 });
 
@@ -41,7 +49,6 @@ app.post('/register', async (req, res) => {
         );
 
         res.redirect('/login.html');
-
     } catch (err) {
         console.error(err);
         res.send('Erro no cadastro');
@@ -51,7 +58,6 @@ app.post('/register', async (req, res) => {
 // ====================
 // ROTA DE LOGIN
 // ====================
-
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -74,7 +80,6 @@ app.post('/login', async (req, res) => {
 
         req.session.userId = user.id;
         res.redirect('/dashboard.html');
-
     } catch (err) {
         console.error(err);
         res.send('Erro ao logar');
@@ -101,6 +106,9 @@ app.get('/logout', (req, res) => {
     });
 });
 
+// ====================
+// START SERVER
+// ====================
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
